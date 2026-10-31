@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Login</title>
+</head>
+<body>
+
+    <h2>Enter Password</h2>
+    <input type="password" id="passwordField" placeholder="Password">
+    <button onclick="checkPassword()">Submit</button>
+    <p id="message"></p>
+
+    <script>
+    async function checkPassword() {
+        const password = document.getElementById('passwordField').value;
+        const messageElement = document.getElementById('message');
+
+        // Send the password to the Python backend
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: password })
+        });
+
+        const result = await response.json();
+        
+        // Display the result sent back by Python
+        if (response.ok) {
+            messageElement.style.color = "green";
+            messageElement.innerText = result.message;
+            // You can redirect the user or reveal content here
+        } else {
+            messageElement.style.color = "red";
+            messageElement.innerText = result.message;
+        }
+    }
+    </script>
+</body>
+</html>
